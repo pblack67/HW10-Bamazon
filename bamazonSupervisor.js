@@ -23,6 +23,7 @@ function mainMenu() {
             message: 'What do you want to do?',
             choices: [
                 'View Product Sales by Department',
+                'View Departments',
                 'Create New Department'
             ]
         }
@@ -30,6 +31,10 @@ function mainMenu() {
         switch (answers.option) {
             case 'View Product Sales by Department':
                 viewSalesByDepartment();
+                break;
+
+            case 'View Departments':
+                viewDepartments();
                 break;
 
             case 'Create New Department':
@@ -43,6 +48,45 @@ function viewSalesByDepartment() {
     mainMenu();
 }
 
+function viewDepartments() {
+    connection.query("SELECT * FROM departments",
+        (err, result) => {
+            if (err) throw err;
+            console.table(result);
+            mainMenu();
+        }
+    )
+}
+
 function createNewDepartment() {
-    mainMenu();
+    inquirer.prompt(
+        [
+            {
+                name: "department_name",
+                type: "input",
+                message: "Department Name?"
+            },
+            {
+                name: "over_head_costs",
+                type: "input",
+                message: "Overhead Costs?"
+            }
+        ]
+    ).then(answers => {
+        addDepartment(answers.department_name, answers.over_head_costs);
+    });
+}
+
+function addDepartment(department_name, over_head_costs) {
+    connection.query(
+        "INSERT INTO departments SET ?",
+        {
+            department_name,
+            over_head_costs
+        },
+        (err, result) => {
+            if (err) throw err;
+            mainMenu();
+        }
+    );
 }
