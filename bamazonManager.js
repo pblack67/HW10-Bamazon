@@ -29,7 +29,6 @@ function mainMenu() {
             ]
         }
     ).then(answers => {
-        console.log(answers);
         switch (answers.option) {
             case 'View Products for Sale':
                 viewProducts();
@@ -44,7 +43,7 @@ function mainMenu() {
                 break;
 
             case 'Add New Product':
-                addProduct();
+                addNewProduct();
                 break;
         }
     });
@@ -81,7 +80,6 @@ function addInventory() {
             }
         ]
     ).then(answers => {
-        console.log(answers);
         updateInventory(answers.item_id, answers.stock_quantity);
     });
 }
@@ -104,6 +102,47 @@ function updateInventory(item_id, stock_quantity) {
     );
 }
 
-function addProduct() {
+function addNewProduct() {
+    inquirer.prompt(
+        [
+            {
+                name: "product_name",
+                type: "input",
+                message: "Product Name? "
+            },
+            {
+                name: "department_name",
+                type: "input",
+                message: "Department Name?"
+            },
+            {
+                name: "price",
+                type: "input",
+                message: "Product Price?"
+            },
+            {
+                name: "stock_quantity",
+                type: "input",
+                message: "Quantity in Stock?"
+            }
+        ]
+    ).then(answers => {
+        addProduct(answers.product_name, answers.department_name, answers.price, answers.stock_quantity);
+    });
+}
 
+function addProduct(product_name, department_name, price, stock_quantity) {
+    connection.query(
+        "INSERT INTO products SET ?",
+        {
+            product_name,
+            department_name,
+            price,
+            stock_quantity
+        },
+        (err, result) => {
+            if (err) throw err;
+            mainMenu();
+        }
+    );
 }
