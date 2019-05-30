@@ -38,11 +38,44 @@ function takeOrder() {
             }
         ]
     ).then(answers => {
-        console.log(answers);
         buyProduct(answers.item_id, answers.quantity);
     });
 }
 
 function buyProduct(item_id, quantity) {
-    
+    connection.query(
+        "SELECT stock_quantity FROM products WHERE ?",
+        {
+            item_id
+        },
+        (err, result) => {
+            if (err) throw err;
+            let stock_quantity = result[0].stock_quantity;
+            if (quantity > stock_quantity) {
+                console.log(`Insufficient quantity, only ${stock_quantity} items available!`);
+                displayProducts();
+            } else {
+                console.log(`Your ${quantity} items will be shipped to you immediately!`);
+                updateStockQuantity(item_id, stock_quantity - quantity);
+            }
+        }
+    );
+}
+
+function updateStockQuantity(item_id, stock_quantity) {
+    connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                stock_quantity
+            },
+            {
+                item_id
+            }
+        ],
+        (err, result) => {
+            if (err) throw err;
+            displayProducts();
+        }
+    );
 }
