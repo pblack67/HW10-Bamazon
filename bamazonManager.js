@@ -40,7 +40,7 @@ function mainMenu() {
                 break;
 
             case 'Add to Inventory':
-                addIventory();
+                addInventory();
                 break;
 
             case 'Add New Product':
@@ -66,8 +66,42 @@ function viewLowInventory() {
     })
 }
 
-function addIventory() {
+function addInventory() {
+    inquirer.prompt(
+        [
+            {
+                name: "item_id",
+                type: "input",
+                message: "What item id would you like to add inventory to? "
+            },
+            {
+                name: "stock_quantity",
+                type: "input",
+                message: "What is the updated stock quantity? "
+            }
+        ]
+    ).then(answers => {
+        console.log(answers);
+        updateInventory(answers.item_id, answers.stock_quantity);
+    });
+}
 
+function updateInventory(item_id, stock_quantity) {
+    connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                stock_quantity
+            },
+            {
+                item_id
+            }
+        ],
+        (err, result) => {
+            if (err) throw err;
+            mainMenu();
+        }
+    );
 }
 
 function addProduct() {
