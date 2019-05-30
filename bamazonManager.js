@@ -59,7 +59,11 @@ function viewProducts() {
 }
 
 function viewLowInventory() {
-
+    connection.query("SELECT * FROM products WHERE stock_quantity < 5", (err, result) => {
+        if (err) throw err;
+        console.table(result);
+        mainMenu();
+    })
 }
 
 function addIventory() {
