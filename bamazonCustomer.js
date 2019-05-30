@@ -44,30 +44,35 @@ function takeOrder() {
 
 function buyProduct(item_id, quantity) {
     connection.query(
-        "SELECT stock_quantity FROM products WHERE ?",
+        "SELECT stock_quantity, price, product_sales FROM products WHERE ?",
         {
             item_id
         },
         (err, result) => {
             if (err) throw err;
             let stock_quantity = result[0].stock_quantity;
+            let price = result[0].price;
+            let product_sales = result[0].product_sales;
             if (quantity > stock_quantity) {
                 console.log(`Insufficient quantity, only ${stock_quantity} items available!`);
                 displayProducts();
             } else {
                 console.log(`Your ${quantity} items will be shipped to you immediately!`);
-                updateStockQuantity(item_id, stock_quantity - quantity);
+                updateStockQuantity(item_id, stock_quantity - quantity, product_sales + quantity * price);
             }
         }
     );
 }
 
-function updateStockQuantity(item_id, stock_quantity) {
+function updateStockQuantity(item_id, stock_quantity, product_sales) {
     connection.query(
-        "UPDATE products SET ? WHERE ?",
+        "UPDATE products SET ?, ? WHERE ?",
         [
             {
                 stock_quantity
+            },
+            {
+                product_sales
             },
             {
                 item_id
