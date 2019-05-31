@@ -16,11 +16,16 @@ connection.connect(function (err) {
 });
 
 function displayProducts() {
-    connection.query("SELECT item_id, product_name, price FROM products", (err, result) => {
-        if (err) throw err;
-        console.table(result);
-        takeOrder();
-    });
+    connection.query(`
+    SELECT item_id AS 'Item ID', 
+    product_name AS 'Product Name', 
+    price AS 'Price'
+    FROM products`,
+        (err, result) => {
+            if (err) throw err;
+            console.table(result);
+            takeOrder();
+        });
 }
 
 function takeOrder() {
@@ -44,7 +49,7 @@ function takeOrder() {
 
 function buyProduct(item_id, quantity) {
     connection.query(
-        "SELECT stock_quantity, price, product_sales FROM products WHERE ?",
+        `SELECT stock_quantity, price, product_sales FROM products WHERE ?`,
         {
             item_id
         },

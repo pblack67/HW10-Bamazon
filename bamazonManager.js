@@ -50,19 +50,35 @@ function mainMenu() {
 }
 
 function viewProducts() {
-    connection.query("SELECT * FROM products", (err, result) => {
-        if (err) throw err;
-        console.table(result);
-        mainMenu();
-    })
+    connection.query(`
+    SELECT item_id AS 'Item ID',
+    product_name AS 'Product Name',
+    department_name AS 'Department Name',
+    price AS 'Price',
+    stock_quantity AS 'Stock Quantity',
+    product_sales AS 'Product Sales'
+    FROM products`, (err, result) => {
+            if (err) throw err;
+            console.table(result);
+            mainMenu();
+        })
 }
 
 function viewLowInventory() {
-    connection.query("SELECT * FROM products WHERE stock_quantity < 5", (err, result) => {
-        if (err) throw err;
-        console.table(result);
-        mainMenu();
-    })
+    connection.query(`
+        SELECT item_id AS 'Item ID',
+        product_name AS 'Product Name',
+        department_name AS 'Department Name',
+        price AS 'Price',
+        stock_quantity AS 'Stock Quantity',
+        product_sales AS 'Product Sales'
+        FROM products
+        WHERE stock_quantity < 5`,
+        (err, result) => {
+            if (err) throw err;
+            console.table(result);
+            mainMenu();
+        })
 }
 
 function addInventory() {

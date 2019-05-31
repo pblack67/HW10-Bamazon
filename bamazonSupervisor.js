@@ -65,7 +65,11 @@ ORDER BY a.department_name;
 }
 
 function viewDepartments() {
-    connection.query("SELECT * FROM departments",
+    connection.query(`
+    SELECT department_id AS 'Department ID', 
+    department_name AS 'Department Name', 
+    over_head_costs AS 'Overhead Costs' 
+    FROM departments`,
         (err, result) => {
             if (err) throw err;
             console.table(result);
