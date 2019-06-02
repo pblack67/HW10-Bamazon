@@ -102,11 +102,8 @@ function addInventory() {
 
 function updateInventory(item_id, stock_quantity) {
     connection.query(
-        "UPDATE products SET ? WHERE ?",
+        `UPDATE products SET stock_quantity = stock_quantity + ${stock_quantity} WHERE ?`,
         [
-            {
-                stock_quantity
-            },
             {
                 item_id
             }
@@ -154,7 +151,8 @@ function addProduct(product_name, department_name, price, stock_quantity) {
             product_name,
             department_name,
             price,
-            stock_quantity
+            stock_quantity,
+            product_sales: 0
         },
         (err, result) => {
             if (err) throw err;
