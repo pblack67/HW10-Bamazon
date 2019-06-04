@@ -2,7 +2,7 @@
 
 ## Video Overview
 
-[Bamazon Video Overview]()
+[Bamazon Video Overview](https://youtu.be/nESMQv9qO3M)
 
 ## Overview
 
