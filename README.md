@@ -4,6 +4,10 @@
 
 [Bamazon Video Overview](https://youtu.be/nESMQv9qO3M)
 
+![Customer](/images/customer.png)
+![Manager](/images/manager.png)
+![Supervisor](/images/supervisor.png)
+
 ## Overview
 
 To run each part of the application:
